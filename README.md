@@ -25,7 +25,7 @@ project/
 To run the app in desktop mode (default):
 
 ```bash
-cargo run
+dx serve
 ```
 
 To run in web mode:
@@ -34,10 +34,10 @@ To run in web mode:
 dx serve --platform web
 ```
 
-Or serve with the default platform:
+Or run in android mode:
 
 ```bash
-dx serve
+dx serve --platform android
 ```
 
 ## Technologies Used
