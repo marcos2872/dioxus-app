@@ -17,37 +17,44 @@ fn App() -> Element {
         div {
             class: "todo-container",
             h1 { class: "todo-title", "Todo List" }
-            input {
-                class: "todo-input",
-                r#type: "text",
-                placeholder: "Add a new todo",
-                value: "{input}",
-                oninput: move |e| *input.write() = e.value(),
-                onkeydown: move |e| {
-                    if e.key() == Key::Enter {
+            div {
+                class: "todo-input-container",
+                input {
+                    class: "todo-input",
+                    r#type: "text",
+                    placeholder: "Add a new todo",
+                    value: "{input}",
+                    oninput: move |e| *input.write() = e.value(),
+                    onkeydown: move |e| {
+                        if e.key() == Key::Enter {
+                            let id = *next_id.read();
+                            todos.write().push((id, input()));
+                            *next_id.write() += 1;
+                            input.write().clear();
+                        }
+                    }
+                }
+                button {
+                    class: "add-button",
+                    disabled: input.read().is_empty(),
+                    onclick: move |_| {
                         let id = *next_id.read();
                         todos.write().push((id, input()));
                         *next_id.write() += 1;
                         input.write().clear();
-                    }
+                    },
+                    "Add Todo"
                 }
-            }
-            button {
-                class: "add-button",
-                onclick: move |_| {
-                    let id = *next_id.read();
-                    todos.write().push((id, input()));
-                    *next_id.write() += 1;
-                    input.write().clear();
-                },
-                "Add Todo"
             }
             ul {
                 class: "todo-list",
                 for (id, todo) in todos.read().iter().cloned() {
                     li {
                         class: "todo-item",
-                        "{todo}"
+                        p {
+                            class: "todo-text",
+                            "{todo}"
+                        }
                         button {
                             class: "remove-button",
                             onclick: move |_| {
